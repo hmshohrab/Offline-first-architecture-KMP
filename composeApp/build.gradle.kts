@@ -60,6 +60,8 @@ kotlin {
             implementation(libs.kstore)
             implementation(libs.composeIcons.fontAwesome)
             implementation(libs.store)
+            implementation("com.raedghazal:kotlinx_datetime_ext:1.2.0")
+
 
         }
 

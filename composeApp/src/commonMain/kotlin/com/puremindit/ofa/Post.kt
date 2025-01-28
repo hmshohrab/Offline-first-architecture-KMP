@@ -6,7 +6,7 @@ data class Post(
     val id: Int,
     val creatorId: Int,
     val caption: String?,
-    val createdAt: LocalDateTime,
+    val createdAt: String,
     val likesCount: Long,
     val commentsCount: Long,
     val sharesCount: Long,

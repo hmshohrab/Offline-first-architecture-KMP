@@ -2,8 +2,10 @@ package com.puremindit.ofa
 
 import com.puremindit.ofa.PostExtensions.asNetworkModel
 import com.puremindit.ofa.PostExtensions.asPostEntity
+import com.puremindit.ofa.data.db.dao.PostDao
+import com.puremindit.ofa.data.db.dao.PostFailedDao
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.datetime.LocalDateTime
 import org.mobilenativefoundation.store.core5.ExperimentalStoreApi
 import org.mobilenativefoundation.store.store5.Bookkeeper
 import org.mobilenativefoundation.store.store5.Converter
@@ -19,7 +21,9 @@ typealias PostStore = MutableStore<Int, Post>
 
 class PostStoreFactory(
     private val client: PostOperations,
-    ) {
+    private val postDao: PostDao,
+    private val postFailedDao: PostFailedDao
+) {
 
     @OptIn(ExperimentalStoreApi::class)
     fun create(): PostStore {
@@ -43,13 +47,12 @@ class PostStoreFactory(
     private fun createSourceOfTruth(): SourceOfTruth<Int, PostEntity, Post> = SourceOfTruth.of(
         reader = { id ->
             flow {
-                emit(Post(1, 2, "3", LocalDateTime.parse(""), 4, 5, 6, 7, true, "8", "9", true))
-
-
+                val data = postDao.selectPostById(id)
+                emit(data)
             }
         },
         writer = { _, postEntity ->
-            //   trailsDatabase.postQueries.insertPost(postEntity)
+            postDao.insert(postEntity)
         }
     )
 
@@ -76,20 +79,16 @@ class PostStoreFactory(
     private fun createBookkeeper(): Bookkeeper<Int> =
         Bookkeeper.by(
             getLastFailedSync = { id ->
-                /*       trailsDatabase.postBookkeepingQueries
-                           .selectMostRecentFailedSync(id).executeAsOneOrNull()?.let { failedSync ->
-                               timestampToEpochMilliseconds(timestamp = failedSync.timestamp)
-                           }*/
-                id.toLong()
+                postFailedDao.getOneFailedUpdate(id)
             },
             setLastFailedSync = { id, timestamp ->
                 try {
-                    /*   trailsDatabase.postBookkeepingQueries.insertFailedSync(
-                           PostFailedSync(
-                               post_id = id,
-                               timestamp = epochMillisecondsToTimestamp(timestamp)
-                           )
-                       )*/
+                    postFailedDao.insertFailedUpdate(
+                        PostFailedUpdateEntity(
+                            post_id = id,
+                            timestamp = timestamp
+                        )
+                    )
                     true
                 } catch (e: Exception) {
                     // Handle the exception
@@ -98,7 +97,7 @@ class PostStoreFactory(
             },
             clear = { id ->
                 try {
-                    // trailsDatabase.postBookkeepingQueries.clearByPostId(id)
+                    postFailedDao.clearFailedDelete(id)
                     true
                 } catch (e: Exception) {
                     // Handle the exception
@@ -107,7 +106,7 @@ class PostStoreFactory(
             },
             clearAll = {
                 try {
-                    //  trailsDatabase.postBookkeepingQueries.clearAll()
+                    postFailedDao.clearAllFailedDeletes()
                     true
                 } catch (e: Exception) {
                     // Handle the exception

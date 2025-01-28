@@ -46,17 +46,25 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.serialization)
             implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation("com.github.skydoves:sandwich-ktor:2.0.10")
+
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.composee)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation("io.insert-koin:koin-compose-viewmodel:${libs.versions.koin.get()}")
+            implementation("io.insert-koin:koin-compose-viewmodel-navigation:${libs.versions.koin.get()}")
             implementation(libs.coil)
             implementation(libs.coil.network.ktor)
+            implementation("io.coil-kt.coil3:coil:3.0.4")
             implementation(libs.multiplatformSettings)
             implementation(libs.kotlinx.datetime)
             implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.platform.identifier)
             implementation(libs.kstore)
             implementation(libs.composeIcons.fontAwesome)
             implementation(libs.store)
@@ -97,7 +105,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 26
         targetSdk = 35
 
         applicationId = "com.puremindit.ofa.androidApp"

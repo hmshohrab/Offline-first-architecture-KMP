@@ -21,7 +21,7 @@ class AppHttpClient {
     val config: HttpClientConfig<*>.() -> Unit = {
         expectSuccess = true
         defaultRequest {
-            url("https://api.github.com")
+            url(baseUrl)
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
         }

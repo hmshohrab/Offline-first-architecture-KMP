@@ -59,7 +59,8 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 composeIcons-fontAwesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "composeIcons" }
-store = { module = "org.mobilenativefoundation.store:store5", version.ref = "store" }
+store5 = { module = "org.mobilenativefoundation.store:store5", version.ref = "store" }
+store5-cache = { module = "org.mobilenativefoundation.store:store5-cache", version.ref = "store" }
 
 platform-identifier = { module = "me.sujanpoudel.multiplatform.utils:platform-identifier", version.ref = "platformIdentifier" }
 

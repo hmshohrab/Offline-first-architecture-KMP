@@ -68,7 +68,7 @@ kotlin {
             implementation(libs.kstore)
             implementation(libs.composeIcons.fontAwesome)
             implementation(libs.store5)
-            implementation(libs.store5.cache)
+            implementation(libs.store.cache5)
 
             implementation("com.raedghazal:kotlinx_datetime_ext:1.2.0")
 
